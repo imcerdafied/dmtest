@@ -3,6 +3,7 @@ import {
   randomSecretHex,
   sha256Hex,
 } from "../supabase/functions/_shared/crypto.ts";
+import { canonicalApiPathAndQuery } from "../supabase/functions/_shared/http.ts";
 
 const [method = "GET", rawUrl, body = ""] = Deno.args;
 const apiKey = Deno.env.get("AGENT_API_KEY");
@@ -20,7 +21,7 @@ const canonical = [
   timestamp,
   nonce,
   method.toUpperCase(),
-  `${url.pathname}${url.search}`,
+  canonicalApiPathAndQuery(url),
   await sha256Hex(body),
 ].join("\n");
 const signature = await hmacHex(secret, canonical);

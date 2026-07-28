@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { sha256Hex, verifyHmacHex } from "./crypto.ts";
-import { apiPath } from "./http.ts";
+import { canonicalApiPathAndQuery } from "./http.ts";
 
 export interface AgentContext {
   agentId: string;
@@ -38,7 +38,7 @@ export async function canonicalRequest(
     timestamp,
     nonce,
     request.method.toUpperCase(),
-    `${apiPath(url)}${url.search}`,
+    canonicalApiPathAndQuery(url),
     bodyHash,
   ].join("\n");
 }

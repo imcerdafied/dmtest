@@ -89,3 +89,8 @@ export function apiPath(url: URL): string {
   const index = url.pathname.indexOf(marker);
   return index === -1 ? url.pathname : url.pathname.slice(index);
 }
+
+export function canonicalApiPathAndQuery(url: URL): string {
+  const query = url.searchParams.toString();
+  return `${apiPath(url)}${query ? `?${query}` : ""}`;
+}

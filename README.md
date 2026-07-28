@@ -74,7 +74,9 @@ SHA256_HEX(EXACT_BODY_BYTES)
 For the hosted Supabase URL, sign the stable API path beginning with
 `/v1/agent/`, not Supabase's `/functions/v1/agent-storefront` routing prefix.
 The verifier normalizes the platform's internal function prefix to the same
-public API path.
+public API path. Query parameters use the URL standard serialization produced
+by `URLSearchParams.toString()` so reserved characters are signed consistently
+through the Supabase gateway.
 
 Sign that exact UTF-8 string with the credential's HMAC secret and send the lowercase hex digest in `X-Agent-Signature`. `X-Agent-Timestamp` must be ISO 8601 and within five minutes. `X-Agent-Nonce` must be a unique 16–128 character URL-safe value.
 

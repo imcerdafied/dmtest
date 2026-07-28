@@ -2,6 +2,7 @@ import { canonicalRequest } from "./auth.ts";
 import { hmacHex, sha256Hex, verifyHmacHex } from "./crypto.ts";
 import {
   apiPath,
+  canonicalApiPathAndQuery,
   errorResponse,
   jsonResponse,
   parsePositiveInteger,
@@ -84,6 +85,17 @@ Deno.test("API path normalizes Supabase function prefix", () => {
     ) ===
       "/v1/agent/catalog",
     "path was not normalized",
+  );
+});
+
+Deno.test("canonical query encoding is stable across gateway rewrites", () => {
+  assert(
+    canonicalApiPathAndQuery(
+      new URL(
+        "https://project.supabase.co/agent-storefront/v1/agent/inventory?skus=A,B",
+      ),
+    ) === "/v1/agent/inventory?skus=A%2CB",
+    "query was not normalized",
   );
 });
 

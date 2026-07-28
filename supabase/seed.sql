@@ -1,0 +1,2 @@
+-- Intentionally empty. Production catalog, inventory, users, and credentials
+-- must come from controlled source systems rather than demo seed data.

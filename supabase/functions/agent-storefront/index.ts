@@ -225,7 +225,8 @@ async function handleCatalog(
     (await sha256Hex(JSON.stringify({ enriched, page, pageSize, count })))
       .slice(0, 32)
   }"`;
-  if (request.headers.get("If-None-Match") === etag) {
+  const ifNoneMatch = request.headers.get("If-None-Match");
+  if (ifNoneMatch?.replace(/^W\//, "") === etag) {
     return new Response(null, {
       status: 304,
       headers: { ETag: etag, "X-Request-Id": requestId, ...corsHeaders },

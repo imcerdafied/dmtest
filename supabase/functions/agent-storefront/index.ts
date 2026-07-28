@@ -115,7 +115,7 @@ Deno.serve(async (request: Request) => {
   } finally {
     if (admin) {
       const status = response?.status ?? 500;
-      void admin.rpc("record_agent_api_event", {
+      const { error: analyticsError } = await admin.rpc("record_agent_api_event", {
         p_request_id: requestId,
         p_event_name: status < 400
           ? "agent_api.request_completed"
@@ -127,6 +127,12 @@ Deno.serve(async (request: Request) => {
         p_status_code: status,
         p_duration_ms: Math.round(performance.now() - startedAt),
       });
+      if (analyticsError) {
+        console.error(JSON.stringify({
+          request_id: requestId,
+          analytics_error: analyticsError.message,
+        }));
+      }
     }
   }
 });

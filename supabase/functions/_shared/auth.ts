@@ -104,7 +104,7 @@ export async function verifyAgentCredential(
     };
   }
 
-  void admin.from("agent_credentials")
+  await admin.from("agent_credentials")
     .update({ last_used_at: new Date().toISOString() })
     .eq("id", credential.id);
 

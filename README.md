@@ -32,11 +32,14 @@ Prerequisites: a linked Supabase project, an existing Auth user for each agent, 
 supabase link --project-ref PROJECT_REF
 supabase db push
 supabase secrets set \
-  SUPABASE_SERVICE_ROLE_KEY=REPLACE_ME \
   AGENT_WEBHOOK_DISPATCH_TOKEN=REPLACE_WITH_RANDOM_32_BYTE_TOKEN
 supabase functions deploy agent-storefront --no-verify-jwt
 supabase functions deploy agent-webhook-dispatcher --no-verify-jwt
 ```
+
+Supabase injects `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` into deployed
+Edge Functions automatically. Do not copy the service-role key into repository
+secrets or attempt to override the platform-provided value.
 
 `verify_jwt = false` is intentional: both functions implement non-JWT authentication. `agent-storefront` verifies the agent HMAC; `agent-webhook-dispatcher` verifies its private bearer token.
 

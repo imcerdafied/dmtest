@@ -115,18 +115,21 @@ Deno.serve(async (request: Request) => {
   } finally {
     if (admin) {
       const status = response?.status ?? 500;
-      const { error: analyticsError } = await admin.rpc("record_agent_api_event", {
-        p_request_id: requestId,
-        p_event_name: status < 400
-          ? "agent_api.request_completed"
-          : "agent_api.request_failed",
-        p_agent_id: context?.agentId ?? null,
-        p_principal_id: context?.principalId ?? null,
-        p_route: path,
-        p_method: request.method,
-        p_status_code: status,
-        p_duration_ms: Math.round(performance.now() - startedAt),
-      });
+      const { error: analyticsError } = await admin.rpc(
+        "record_agent_api_event",
+        {
+          p_request_id: requestId,
+          p_event_name: status < 400
+            ? "agent_api.request_completed"
+            : "agent_api.request_failed",
+          p_agent_id: context?.agentId ?? null,
+          p_principal_id: context?.principalId ?? null,
+          p_route: path,
+          p_method: request.method,
+          p_status_code: status,
+          p_duration_ms: Math.round(performance.now() - startedAt),
+        },
+      );
       if (analyticsError) {
         console.error(JSON.stringify({
           request_id: requestId,

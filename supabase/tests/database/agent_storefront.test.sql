@@ -1,14 +1,14 @@
 begin;
 select plan(18);
 
-select has_table('public', 'agent_credentials');
-select has_table('public', 'contract_prices');
-select has_table('public', 'agent_quotes');
-select has_table('public', 'agent_orders');
-select has_table('public', 'agent_webhooks');
-select has_table('private', 'agent_rate_limits');
-select has_table('private', 'agent_request_nonces');
-select has_table('private', 'agent_webhook_jobs');
+select has_table('public', 'agent_credentials', 'agent_credentials exists');
+select has_table('public', 'contract_prices', 'contract_prices exists');
+select has_table('public', 'agent_quotes', 'agent_quotes exists');
+select has_table('public', 'agent_orders', 'agent_orders exists');
+select has_table('public', 'agent_webhooks', 'agent_webhooks exists');
+select has_table('private', 'agent_rate_limits', 'agent_rate_limits exists');
+select has_table('private', 'agent_request_nonces', 'agent_request_nonces exists');
+select has_table('private', 'agent_webhook_jobs', 'agent_webhook_jobs exists');
 
 select has_function('public', 'issue_agent_credential', array['uuid', 'uuid']);
 select has_function('public', 'consume_agent_rate_limit', array['text']);

@@ -53,6 +53,28 @@ Deno.test("canonical request covers timestamp, nonce, method, path, query, and b
   );
 });
 
+Deno.test("canonical request ignores Supabase function routing prefixes", async () => {
+  const timestamp = "2026-07-28T12:00:00.000Z";
+  const canonical = await canonicalRequest(
+    new Request(
+      "https://project.supabase.co/agent-storefront/v1/agent/catalog?page=1",
+    ),
+    timestamp,
+    "1234567890abcdef",
+  );
+  const expectedBodyHash = await sha256Hex("");
+  assert(
+    canonical === [
+      timestamp,
+      "1234567890abcdef",
+      "GET",
+      "/v1/agent/catalog?page=1",
+      expectedBodyHash,
+    ].join("\n"),
+    "Supabase-prefixed canonical request mismatch",
+  );
+});
+
 Deno.test("API path normalizes Supabase function prefix", () => {
   assert(
     apiPath(
